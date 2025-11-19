@@ -5,8 +5,8 @@ import { Ingredient, RecurringItem, StockItem, Category, Unit } from '@/types';
 interface EditModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (data: Partial<Ingredient & RecurringItem & StockItem>) => void;
-    initialData: Partial<Ingredient & RecurringItem & StockItem>;
+    onSave: (data: any) => void;
+    initialData: any;
     type: 'INGREDIENT' | 'RECURRING' | 'STOCK';
 }
 
