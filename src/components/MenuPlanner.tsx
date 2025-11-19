@@ -12,7 +12,7 @@ export default function MenuPlanner() {
         if (!menu) return;
 
         const updates: Partial<Menu> = { [field]: value };
-        let newQuantities = { ...menu.quantities };
+        const newQuantities = { ...menu.quantities };
 
         // Check if we are updating an ingredient field
         if (field === 'proteinId' || field === 'vegetableId' || field === 'starchId') {

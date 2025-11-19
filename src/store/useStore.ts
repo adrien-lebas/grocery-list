@@ -39,7 +39,7 @@ interface AppState {
     resetList: () => Promise<void>;
 
     // History Actions
-    archiveCurrentList: (name: string, items: any[]) => Promise<void>;
+    archiveCurrentList: (name: string, items: { name: string; category: string; quantity: string; checked: boolean }[]) => Promise<void>;
     fetchArchivedLists: () => Promise<ShoppingList[]>;
 }
 

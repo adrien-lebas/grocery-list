@@ -5,7 +5,7 @@ import "./globals.css";
 import Link from "next/link";
 import { ShoppingCart, Calendar, Repeat, Archive, History } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { cn } from '@/lib/utils';
+
 import { useStore } from '@/store/useStore';
 import { useEffect } from 'react';
 import { supabase } from '@/lib/supabase';

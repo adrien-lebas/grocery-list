@@ -16,8 +16,7 @@ export default function ShoppingList() {
         toggleSurplusItem,
         removeSurplusItem,
         resetList,
-        archiveCurrentList,
-        isLoading
+        archiveCurrentList
     } = useStore();
 
     const [newSurplus, setNewSurplus] = useState('');
@@ -36,7 +35,7 @@ export default function ShoppingList() {
             }
         });
         return acc;
-    }, {} as Record<string, { id: string; name: string; defaultUnit: string; totalQty: number }>);
+    }, {} as Record<string, { id: string; name: string; category: string; defaultUnit: string; totalQty: number }>);
 
     // 2. Get Recurring Items (Selected)
     const selectedRecurring = recurringItems.filter(i => i.isSelected);
@@ -52,19 +51,47 @@ export default function ShoppingList() {
         }
     };
 
+    const handleArchive = async () => {
+        const name = prompt('Nom de la liste (ex: Courses du 19/11) :', `Courses du ${new Date().toLocaleDateString()}`);
+        if (!name) return;
+
+        // Calculate all items to save
+        const itemsToSave = [
+            ...Object.values(menuIngredients).map(i => ({ name: i.name, category: i.category, quantity: `${i.totalQty} ${i.defaultUnit}`, checked: false })),
+            ...selectedRecurring.map(i => ({ name: i.name, category: i.category, quantity: '1', checked: false })),
+            ...stockToBuy.map(i => ({ name: i.name, category: i.category, quantity: '1', checked: false })),
+            ...surplusItems.map(i => ({ name: i.name, category: 'Autre', quantity: '1', checked: i.checked }))
+        ];
+
+        try {
+            await archiveCurrentList(name, itemsToSave);
+            alert('Liste sauvegardée et archivée !');
+        } catch (error) {
+            console.error(error);
+            alert('Erreur lors de la sauvegarde.');
+        }
+    };
+
     return (
         <div className="space-y-8">
             <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-slate-100">Liste de Courses</h2>
                 <div className="flex items-center gap-3">
                     <button
+                        onClick={handleArchive}
+                        className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition-colors"
+                        title="Sauvegarder et Nouvelle Liste"
+                    >
+                        <Save className="w-5 h-5" />
+                    </button>
+                    <button
                         onClick={() => {
                             if (confirm('Voulez-vous vraiment réinitialiser la liste de courses ? (Les menus seront conservés)')) {
                                 resetList();
                             }
                         }}
-                        className="text-slate-400 hover:text-red-400 transition-colors p-2 rounded-lg hover:bg-slate-800"
-                        title="Réinitialiser la liste"
+                        className="p-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition-colors"
+                        title="Tout effacer"
                     >
                         <RefreshCw className="w-5 h-5" />
                     </button>

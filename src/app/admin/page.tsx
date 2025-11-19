@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useStore } from '@/store/useStore';
 import { Trash2, Plus, Edit2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Category, Unit } from '@/types';
+import { Category, Unit, Ingredient, RecurringItem, StockItem } from '@/types';
 import EditModal from '@/components/EditModal';
 
 export default function AdminPage() {
@@ -66,7 +66,7 @@ export default function AdminPage() {
 function IngredientsManager() {
     const { ingredients, removeIngredient, addIngredient, updateIngredient } = useStore();
     const [newIngredient, setNewIngredient] = useState({ name: '', category: 'PROTEIN' as Category, defaultUnit: 'g' as Unit, defaultPortion: 100 });
-    const [editingItem, setEditingItem] = useState<any>(null);
+    const [editingItem, setEditingItem] = useState<Ingredient | null>(null);
 
     const handleAdd = (e: React.FormEvent) => {
         e.preventDefault();
@@ -166,13 +166,15 @@ function IngredientsManager() {
                 ))}
             </div>
 
-            <EditModal
-                isOpen={!!editingItem}
-                onClose={() => setEditingItem(null)}
-                onSave={(data) => updateIngredient(editingItem.id, data)}
-                initialData={editingItem}
-                type="INGREDIENT"
-            />
+            {editingItem && (
+                <EditModal
+                    isOpen={!!editingItem}
+                    onClose={() => setEditingItem(null)}
+                    onSave={(data) => updateIngredient(editingItem.id, data)}
+                    initialData={editingItem}
+                    type="INGREDIENT"
+                />
+            )}
         </div>
     );
 }
@@ -180,7 +182,7 @@ function IngredientsManager() {
 function RecurringManager() {
     const { recurringItems, addRecurringItem, removeRecurringItem, updateRecurringItem } = useStore();
     const [newItem, setNewItem] = useState({ name: '', category: 'Frais' });
-    const [editingItem, setEditingItem] = useState<any>(null);
+    const [editingItem, setEditingItem] = useState<RecurringItem | null>(null);
 
     const handleAdd = (e: React.FormEvent) => {
         e.preventDefault();
@@ -259,13 +261,15 @@ function RecurringManager() {
                 ))}
             </div>
 
-            <EditModal
-                isOpen={!!editingItem}
-                onClose={() => setEditingItem(null)}
-                onSave={(data) => updateRecurringItem(editingItem.id, data)}
-                initialData={editingItem}
-                type="RECURRING"
-            />
+            {editingItem && (
+                <EditModal
+                    isOpen={!!editingItem}
+                    onClose={() => setEditingItem(null)}
+                    onSave={(data) => updateRecurringItem(editingItem.id, data)}
+                    initialData={editingItem}
+                    type="RECURRING"
+                />
+            )}
         </div>
     );
 }
@@ -273,7 +277,7 @@ function RecurringManager() {
 function StockManager() {
     const { stockItems, addStockItem, removeStockItem, updateStockItem } = useStore();
     const [newItem, setNewItem] = useState({ name: '', category: 'Entretien' });
-    const [editingItem, setEditingItem] = useState<any>(null);
+    const [editingItem, setEditingItem] = useState<StockItem | null>(null);
 
     const handleAdd = (e: React.FormEvent) => {
         e.preventDefault();
@@ -351,13 +355,16 @@ function StockManager() {
                 ))}
             </div>
 
-            <EditModal
-                isOpen={!!editingItem}
-                onClose={() => setEditingItem(null)}
-                onSave={(data) => updateStockItem(editingItem.id, data)}
-                initialData={editingItem}
-                type="STOCK"
-            />
+            {editingItem && (
+                <EditModal
+                    isOpen={!!editingItem}
+                    onClose={() => setEditingItem(null)}
+                    onSave={(data) => updateStockItem(editingItem.id, data)}
+                    initialData={editingItem}
+                    type="STOCK"
+                    key={editingItem.id}
+                />
+            )}
         </div>
     );
 }

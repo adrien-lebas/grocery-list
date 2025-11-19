@@ -1,22 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { X } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Category, Unit } from '@/types';
+import { Ingredient, RecurringItem, StockItem, Category, Unit } from '@/types';
 
 interface EditModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (data: any) => void;
-    initialData: any;
+    onSave: (data: Partial<Ingredient & RecurringItem & StockItem>) => void;
+    initialData: Partial<Ingredient & RecurringItem & StockItem>;
     type: 'INGREDIENT' | 'RECURRING' | 'STOCK';
 }
 
 export default function EditModal({ isOpen, onClose, onSave, initialData, type }: EditModalProps) {
     const [formData, setFormData] = useState(initialData || {});
 
-    useEffect(() => {
-        setFormData(initialData || {});
-    }, [initialData]);
+
 
     if (!isOpen) return null;
 
@@ -30,7 +27,7 @@ export default function EditModal({ isOpen, onClose, onSave, initialData, type }
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
             <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-md shadow-2xl">
                 <div className="flex items-center justify-between p-4 border-b border-slate-800">
-                    <h3 className="text-lg font-semibold text-slate-100">Modifier l'élément</h3>
+                    <h3 className="text-lg font-semibold text-slate-100">Modifier l&apos;élément</h3>
                     <button onClick={onClose} className="text-slate-400 hover:text-white">
                         <X className="w-5 h-5" />
                     </button>
@@ -52,7 +49,7 @@ export default function EditModal({ isOpen, onClose, onSave, initialData, type }
                         <label className="block text-sm font-medium text-slate-400 mb-1">Catégorie</label>
                         <select
                             value={formData.category || ''}
-                            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                            onChange={(e) => setFormData({ ...formData, category: e.target.value as Category })}
                             className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500"
                             required
                         >
@@ -99,7 +96,7 @@ export default function EditModal({ isOpen, onClose, onSave, initialData, type }
                                 <label className="block text-sm font-medium text-slate-400 mb-1">Unité</label>
                                 <select
                                     value={formData.defaultUnit || 'unit'}
-                                    onChange={(e) => setFormData({ ...formData, defaultUnit: e.target.value })}
+                                    onChange={(e) => setFormData({ ...formData, defaultUnit: e.target.value as Unit })}
                                     className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500"
                                 >
                                     <option value="g">Grammes (g)</option>

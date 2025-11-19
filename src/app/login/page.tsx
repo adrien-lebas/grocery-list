@@ -36,8 +36,12 @@ export default function LoginPage() {
                 setError('Compte créé ! Vous pouvez vous connecter.');
                 setMode('login');
             }
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError('Une erreur est survenue');
+            }
         } finally {
             setLoading(false);
         }
